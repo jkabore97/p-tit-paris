@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  --bordeaux: #5c0c16;
+  --bordeaux-deep: #3b060c;
+  --bordeaux-soft: #7a1522;
+  --cream: #efdcc4;
+  --cream-soft: #f6eadb;
+  --gold: #d8bf94;
+  --gold-deep: #b9975f;
+  --ink: #2a1a16;
+  --background: var(--cream);
+  --foreground: var(--ink);
+}
+
+@theme inline {
+  --color-bordeaux: var(--bordeaux);
+  --color-bordeaux-deep: var(--bordeaux-deep);
+  --color-bordeaux-soft: var(--bordeaux-soft);
+  --color-cream: var(--cream);
+  --color-cream-soft: var(--cream-soft);
+  --color-gold: var(--gold);
+  --color-gold-deep: var(--gold-deep);
+  --color-ink: var(--ink);
+  --font-display: var(--font-display), "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-sans), "Jost", "Helvetica Neue", Arial, sans-serif;
+  --animate-rise: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  --animate-shimmer: shimmer 6s linear infinite;
+  --animate-float: float 8s ease-in-out infinite;
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-2deg); }
+  50% { transform: translateY(-14px) rotate(2deg); }
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), "Jost", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-display { font-family: var(--font-display), "Playfair Display", Georgia, serif; }
+
+/* Texture de velours bordeaux, inspirée de la carte imprimée */
+.velvet {
+  background-color: var(--bordeaux);
+  background-image:
+    radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.08), transparent 45%),
+    radial-gradient(ellipse at 85% 90%, rgba(0, 0, 0, 0.35), transparent 50%),
+    radial-gradient(ellipse at 60% 40%, rgba(122, 21, 34, 0.6), transparent 60%);
+}
+
+.gold-text {
+  background: linear-gradient(100deg, #b9975f 0%, #f1dfb7 35%, #d8bf94 50%, #f7ead0 65%, #b9975f 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: var(--animate-shimmer);
+}
+
+.paper {
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(ellipse at 10% 0%, rgba(255, 255, 255, 0.5), transparent 50%),
+    radial-gradient(ellipse at 90% 100%, rgba(185, 151, 95, 0.25), transparent 50%);
+}
+
+.card-hover { transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s; }
+.card-hover:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -20px rgba(59, 6, 12, 0.55); }
+
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { scrollbar-width: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  .gold-text, .animate-float, .animate-rise { animation: none !important; }
+}
