@@ -3,6 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { AddButton } from "@/components/AddButton";
+import { Logo } from "@/components/Logo";
 import { DishCard } from "@/components/DishCard";
 import { Reveal } from "@/components/Reveal";
 import { ShareButton } from "@/components/ShareButton";
@@ -37,7 +38,7 @@ export default async function DishPage({ params }: PageProps<"/menu/[slug]">) {
             {item.photo ? (
               <Image src={item.photo} alt={item.name} fill priority sizes="(max-width:768px) 100vw, 50vw" className="object-cover" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-candy-soft to-mint-soft font-display text-7xl font-extrabold text-candy/40">P</div>
+              <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-candy-soft to-mint-soft"><Logo className="h-32 w-32" /></div>
             )}
           </div>
           <div className="animate-rise" style={{ animationDelay: ".15s" }}>

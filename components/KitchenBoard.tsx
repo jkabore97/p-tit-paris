@@ -99,9 +99,9 @@ export function KitchenBoard() {
 
   return (
     <div className="min-h-screen bg-marble">
-      <header className="sticky top-0 z-20 flex flex-wrap items-center justify-between gap-3 bg-ink px-5 py-3 text-white">
+      <header className="velvet sticky top-0 z-20 flex flex-wrap items-center justify-between gap-3 px-5 py-3 text-white">
         <div className="flex items-center gap-3">
-          <Logo className="h-9 w-9 text-candy" />
+          <Logo className="h-9 w-9" variant="pink" />
           <div>
             <p className="font-display text-xl font-bold leading-tight">Cuisine · P&apos;tit Paris</p>
             <p className="text-xs text-white/60">{orders ? `${orders.filter((o) => o.status !== "served").length} commande(s) en cours · actualisé toutes les 5 s` : "Chargement…"}</p>

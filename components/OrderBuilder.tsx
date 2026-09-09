@@ -181,7 +181,7 @@ export function OrderBuilder({ tableFromUrl }: { tableFromUrl: number | null }) 
 
       {/* Panier flottant */}
       <div className="fixed inset-x-0 bottom-0 z-40 px-3 pb-3">
-        <div className={`mx-auto max-w-2xl overflow-hidden rounded-[2rem] bg-ink text-white shadow-2xl shadow-ink/40 transition-all ${open ? "max-h-[75vh]" : "max-h-20"}`}>
+        <div className={`mx-auto max-w-2xl velvet overflow-hidden rounded-[2rem] text-white shadow-2xl shadow-wine/40 transition-all ${open ? "max-h-[75vh]" : "max-h-20"}`}>
           <button onClick={() => setOpen((o) => !o)} className="flex w-full items-center justify-between gap-4 px-6 py-4">
             <span className="flex items-center gap-3">
               <span className={`grid h-9 w-9 place-items-center rounded-full bg-candy font-bold ${count ? "animate-pop" : ""}`}>{count}</span>
