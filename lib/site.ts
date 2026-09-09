@@ -1,6 +1,6 @@
 export const site = {
   name: "P'tit Paris",
-  tagline: "Le pari de vous faire plaisir",
+  tagline: "Un air de Paris à Ouagadougou",
   city: "Ouagadougou, Burkina Faso",
   neighbourhood: "Gounghin",
   menuUrl: "https://menu.ptitparis.com/menu",

@@ -40,7 +40,7 @@ export function SiteEditor({ initial }: { initial: SiteData }) {
       <div className="grid gap-4 lg:grid-cols-2">
         <Card className="space-y-4">
           <h2 className="font-display text-xl font-bold text-ink">Le restaurant</h2>
-          <Field label="Devise"><Input value={d.tagline ?? ""} onChange={(e) => setD({ ...d, tagline: e.target.value })} placeholder="Le pari de vous faire plaisir" /></Field>
+          <Field label="Devise"><Input value={d.tagline ?? ""} onChange={(e) => setD({ ...d, tagline: e.target.value })} placeholder="Un air de Paris à Ouagadougou" /></Field>
           <Field label="WhatsApp (réservations)" hint="Format international sans le +, ex. 22670000000. Active le bouton WhatsApp de la page Réserver."><Input inputMode="tel" value={d.whatsapp ?? ""} onChange={(e) => setD({ ...d, whatsapp: e.target.value })} placeholder="22670000000" /></Field>
           <Field label="Téléphone affiché"><Input value={d.phone ?? ""} onChange={(e) => setD({ ...d, phone: e.target.value })} placeholder="+226 70 00 00 00" /></Field>
           <Field label="Adresse"><Input value={d.address ?? ""} onChange={(e) => setD({ ...d, address: e.target.value })} placeholder="Gounghin, Ouagadougou, Burkina Faso" /></Field>
