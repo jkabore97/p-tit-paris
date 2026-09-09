@@ -48,10 +48,10 @@ export default async function QrPage({ searchParams }: PageProps<"/cuisine/qr">)
         {tables.map(({ t, svg }) => (
           <div key={t} className="flex break-inside-avoid flex-col items-center rounded-3xl border-2 border-dashed border-ink/15 p-4 text-center print:rounded-none">
             <div className="flex items-center gap-2">
-              <Logo className="h-7 w-7 text-candy" />
-              <span className="font-display text-lg font-bold text-ink">P&apos;tit Paris</span>
+              <Logo className="h-7 w-7" />
+              <span className="font-display text-lg font-extrabold uppercase tracking-[0.1em] text-wine">P&apos;tit Paris</span>
             </div>
-            <p className="font-display mt-1 text-4xl font-extrabold text-candy">Table {t}</p>
+            <p className="font-display mt-1 text-4xl font-extrabold text-wine">Table {t}</p>
             <div className="mt-2 w-40" dangerouslySetInnerHTML={{ __html: svg }} />
             <p className="mt-2 text-xs font-semibold uppercase tracking-[0.15em] text-ink">Scannez · Commandez · Savourez</p>
             <p className="mt-1 text-[10px] text-muted">{base.replace(/^https?:\/\//, "")}/t/{t}</p>

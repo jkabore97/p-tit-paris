@@ -35,16 +35,16 @@ export default function Home() {
 
         <div className="relative mx-auto flex min-h-[92vh] max-w-6xl flex-col items-center justify-center px-5 py-24 text-center">
           <div className="animate-rise relative">
-            <Logo className="h-20 w-20 text-candy drop-shadow-[0_12px_24px_rgba(255,79,127,.45)]" />
+            <Logo className="h-24 w-24 drop-shadow-[0_16px_30px_rgba(140,15,38,.35)]" />
             <span className="absolute inset-0 -z-10 animate-ring rounded-full" />
           </div>
-          <p className="animate-rise mt-6 text-xs font-semibold uppercase tracking-[0.4em] text-honey-deep" style={{ animationDelay: ".1s" }}>
+          <p className="animate-rise mt-6 text-xs font-semibold uppercase tracking-[0.4em] text-wine" style={{ animationDelay: ".1s" }}>
             {site.tagline}
           </p>
           <h1 className="font-display animate-rise mt-3 text-[18vw] font-extrabold leading-[0.82] tracking-tight md:text-[9.5rem]" style={{ animationDelay: ".2s" }}>
             <span className="sunrise-text">P&apos;tit</span>
             <br />
-            <span className="text-ink">Paris</span>
+            <span className="text-wine">Paris</span>
           </h1>
           <p className="animate-rise mt-8 max-w-xl text-lg text-ink/70" style={{ animationDelay: ".3s" }}>
             Boulangerie, brunch, burgers, pâtes, pizzas, grillades, pâtisserie et cocktails. Au cœur de {site.neighbourhood},{" "}
@@ -87,7 +87,7 @@ export default function Home() {
         <div className="dots absolute inset-0 opacity-60" />
         <div className="relative mx-auto max-w-6xl px-5">
           <Reveal className="text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-candy">Nouveau · commande à table</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-wine">Nouveau · commande à table</p>
             <h2 className="font-display mt-3 text-4xl font-extrabold text-ink md:text-6xl">
               Scannez. Commandez. <span className="candy-text">Savourez.</span>
             </h2>
@@ -153,7 +153,7 @@ export default function Home() {
         <div className="mx-auto max-w-6xl px-5">
           <Reveal className="flex flex-wrap items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-candy">👑 Spécialités maison</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-wine">👑 Spécialités maison</p>
               <h2 className="font-display mt-3 text-4xl font-extrabold text-ink md:text-5xl">Ce que le chef signe.</h2>
             </div>
             <Link href="/menu?tag=house" className="text-sm font-semibold uppercase tracking-[0.2em] text-candy hover:text-ink">
@@ -204,7 +204,7 @@ export default function Home() {
       <section className="marble py-20">
         <div className="mx-auto max-w-6xl px-5">
           <Reveal>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-candy">Trois cartes, une maison</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-wine">Trois cartes, une maison</p>
             <h2 className="font-display mt-3 text-4xl font-extrabold text-ink md:text-5xl">{totalDishes} références, du croissant au champagne.</h2>
           </Reveal>
           <div className="mt-10 grid gap-6 md:grid-cols-3">

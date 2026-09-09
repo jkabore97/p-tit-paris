@@ -3,8 +3,11 @@
 :root {
   --paper: #fffaf3;
   --marble: #f6efe4;
-  --ink: #2b2118;
-  --muted: #7d6b5d;
+  --ink: #3d0a12;
+  --muted: #7d5f5a;
+  --wine: #5c0c16;
+  --wine-deep: #3b060c;
+  --crimson: #b8163a;
   --honey: #f5b33b;
   --honey-deep: #d8931a;
   --wood: #ecc98a;
@@ -27,6 +30,9 @@
   --color-paper: var(--paper);
   --color-marble: var(--marble);
   --color-ink: var(--ink);
+  --color-wine: var(--wine);
+  --color-wine-deep: var(--wine-deep);
+  --color-crimson: var(--crimson);
   --color-muted: var(--muted);
   --color-honey: var(--honey);
   --color-honey-deep: var(--honey-deep);
@@ -85,6 +91,13 @@ body {
     radial-gradient(ellipse at 15% 10%, rgba(255, 255, 255, 0.9), transparent 45%),
     radial-gradient(ellipse at 85% 90%, rgba(245, 179, 59, 0.18), transparent 45%),
     radial-gradient(ellipse at 60% 50%, rgba(255, 79, 127, 0.07), transparent 55%);
+}
+.velvet {
+  background-color: var(--wine);
+  background-image:
+    radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.08), transparent 45%),
+    radial-gradient(ellipse at 85% 90%, rgba(0, 0, 0, 0.35), transparent 50%),
+    radial-gradient(ellipse at 60% 40%, rgba(122, 21, 34, 0.6), transparent 60%);
 }
 .dots {
   background-image: radial-gradient(rgba(43, 33, 24, 0.09) 1px, transparent 1px);

@@ -25,7 +25,7 @@ export function PinGate() {
   return (
     <div className="marble flex min-h-screen items-center justify-center px-5">
       <form onSubmit={submit} className="animate-pop w-full max-w-sm rounded-[2rem] bg-white p-8 text-center shadow-2xl">
-        <Logo className="mx-auto h-14 w-14 text-candy" />
+        <Logo className="mx-auto h-14 w-14" />
         <h1 className="font-display mt-4 text-3xl font-extrabold text-ink">Espace équipe</h1>
         <p className="mt-1 text-sm text-muted">Entrez le PIN du personnel pour ouvrir l&apos;écran cuisine.</p>
         <input

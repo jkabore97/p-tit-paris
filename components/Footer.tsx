@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Logo } from "./Logo";
+import { Logo, Wordmark } from "./Logo";
 import { site } from "@/lib/site";
 
 export function Footer() {
@@ -16,32 +16,32 @@ export function Footer() {
           </Link>
         </div>
       </div>
-      <div className="marble">
+      <div className="velvet text-white/85">
         <div className="mx-auto grid max-w-6xl gap-10 px-5 py-14 md:grid-cols-3">
           <div>
             <div className="flex items-center gap-3">
-              <Logo className="h-11 w-11 text-candy" />
+              <Logo className="h-11 w-11" variant="pink" />
               <div>
-                <p className="font-display text-2xl font-bold text-ink">{site.name}</p>
-                <p className="text-xs uppercase tracking-[0.25em] text-candy">{site.tagline}</p>
+                <p className="text-white"><Wordmark className="text-xl" /></p>
+                <p className="text-xs uppercase tracking-[0.25em] text-honey">{site.tagline}</p>
               </div>
             </div>
-            <p className="mt-5 max-w-xs text-sm leading-relaxed text-muted">
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/70">
               {site.neighbourhood}, {site.city}. Petit-déjeuner dès 6h30, déjeuner et dîner, pâtisserie, cocktails et cave jusque tard.
             </p>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-[0.25em] text-honey-deep">Explorer</p>
-            <ul className="mt-4 space-y-2 text-sm text-ink/80">
-              <li><Link className="hover:text-candy" href="/menu">La carte complète</Link></li>
-              <li><Link className="hover:text-candy" href="/commander">Commander à table</Link></li>
-              <li><Link className="hover:text-candy" href="/sommelier">Le sommelier IA</Link></li>
-              <li><Link className="hover:text-candy" href="/reserver">Réserver une table</Link></li>
-              <li><Link className="hover:text-candy" href="/cuisine">Espace équipe</Link></li>
+            <p className="text-xs uppercase tracking-[0.25em] text-honey">Explorer</p>
+            <ul className="mt-4 space-y-2 text-sm text-white/80">
+              <li><Link className="hover:text-honey" href="/menu">La carte complète</Link></li>
+              <li><Link className="hover:text-honey" href="/commander">Commander à table</Link></li>
+              <li><Link className="hover:text-honey" href="/sommelier">Le sommelier IA</Link></li>
+              <li><Link className="hover:text-honey" href="/reserver">Réserver une table</Link></li>
+              <li><Link className="hover:text-honey" href="/cuisine">Espace équipe</Link></li>
             </ul>
           </div>
           <div>
-            <p className="text-xs uppercase tracking-[0.25em] text-honey-deep">Suivez-nous</p>
+            <p className="text-xs uppercase tracking-[0.25em] text-honey">Suivez-nous</p>
             <ul className="mt-4 flex flex-wrap gap-2">
               {site.socials.map((s, i) => (
                 <li key={s.label}>
@@ -58,7 +58,7 @@ export function Footer() {
             </ul>
           </div>
         </div>
-        <div className="border-t border-ink/10 py-5 text-center text-xs text-muted">
+        <div className="border-t border-white/10 py-5 text-center text-xs text-white/50">
           © {new Date().getFullYear()} {site.name} · Prix en francs CFA · Carte susceptible de changer
         </div>
       </div>

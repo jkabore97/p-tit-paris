@@ -16,10 +16,13 @@ export default async function Image() {
   );
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", background: "linear-gradient(135deg,#fffaf3 0%,#ffdbe4 45%,#ffe7b3 100%)", color: "#2b2118", fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 800 }}>
+      <div style={{ width: "100%", height: "100%", display: "flex", background: "linear-gradient(135deg,#fffaf3 0%,#ffdbe4 45%,#ffe7b3 100%)", color: "#3d0a12", fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 800 }}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: 64, width: 620 }}>
           <div style={{ fontSize: 20, letterSpacing: 8, textTransform: "uppercase", color: "#ff4f7f" }}>Le pari de vous faire plaisir</div>
-          <div style={{ fontSize: 120, lineHeight: 0.95, marginTop: 24 }}>P&apos;tit Paris</div>
+          <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 24 }}>
+            <svg viewBox="0 0 100 100" width="110" height="110"><circle cx="50" cy="50" r="49" fill="#8c0f26" /><g fill="none" stroke="#fff2e4" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round"><path d="M7 53.5 H57" /><path d="M35 53.5 V25 A13 13 0 0 1 61 25 V62" /><path d="M93 46.5 H43" /><path d="M65 46.5 V75 A13 13 0 0 1 39 75 V38" /></g></svg>
+            <div style={{ fontSize: 96, lineHeight: 0.95, color: "#5c0c16", letterSpacing: 4 }}>P&apos;TIT PARIS</div>
+          </div>
           <div style={{ fontSize: 26, marginTop: 28, color: "#7d6b5d" }}>Petit-déjeuner · Déjeuner & Dîner · Bar & Cave</div>
           <div style={{ fontSize: 18, letterSpacing: 4, marginTop: 40, textTransform: "uppercase", color: "#ff4f7f" }}>Gounghin · Ouagadougou</div>
         </div>
