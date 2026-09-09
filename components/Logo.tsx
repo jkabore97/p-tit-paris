@@ -1,5 +1,5 @@
-export function Logo({ className = "h-9 w-9", stroke = "var(--cream)" }: { className?: string; stroke?: string }) {
-  // Monogramme inspiré du logo P'tit Paris (deux "P" entrelacés dans un médaillon)
+export function Logo({ className = "h-9 w-9", stroke = "#fff" }: { className?: string; stroke?: string }) {
+  // Monogramme inspiré du médaillon rose P'tit Paris (deux « P » entrelacés)
   return (
     <svg viewBox="0 0 64 64" className={className} aria-hidden="true">
       <circle cx="32" cy="32" r="31" fill="currentColor" />

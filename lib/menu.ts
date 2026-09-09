@@ -20,6 +20,8 @@ export type Section = {
   id: string;
   title: string;
   tagline?: string;
+  /** Photos d'ambiance de la rubrique (sans plat associé). */
+  gallery?: string[];
   /** Libellé des deux colonnes de prix, ex. "Moyenne / Grande". */
   dual?: string;
   note?: string;
@@ -62,7 +64,7 @@ const manaiches: Section = {
   id: "manaiches",
   title: "Manaïches",
   items: [
-    { name: "Manouché Viande (Lahem Baajine)", desc: "Pâte garnie de viande hachée de mouton, tomate, oignon", price: 3000, photo: "/photos/manaiches-spread.jpg" },
+    { name: "Manouché Viande (Lahem Baajine)", desc: "Pâte garnie de viande hachée de mouton, tomate, oignon", price: 3000, photo: "/photos/manouche-viande.jpg" },
     { name: "Manouché Zaatar (Thym)", desc: "Pâte garnie de zaatar (thym), sésame et huile d'olive", price: 1500, tags: ["veg"], photo: "/photos/manouche-zaatar.jpg" },
     { name: "Manouché Fromage", desc: "Pâte garnie d'un mélange de fromages, akawi, mozzarella", price: 4000, tags: ["veg"] },
     { name: "Manouché Fourré", desc: "Manouché zaatar fourré au fromage", price: 5000, tags: ["veg"] },
@@ -395,7 +397,7 @@ export const dejeunerDiner: Book = {
         { name: "Poulet Local Farci au Riz", desc: "Poulet local rôti farci de riz aux légumes, sauce tomate épicée", price: 12000 },
         { name: "Riz Cantonais au Poulet", desc: "Poulet sauté aux oignons, carotte, chou blanc, sauce asiatique et riz cantonais", price: 6000, photo: "/photos/riz-cantonais.jpg" },
         { name: "Riz Cantonais au Bœuf", desc: "Bœuf sauté aux oignons, carotte, chou blanc, sauce asiatique et riz cantonais", price: 7000 },
-        { name: "Bœuf à la Milanaise", desc: "Entrecôte de bœuf panée, spaghetti arrabbiata, parmesan", price: 9000, tags: ["house"] },
+        { name: "Bœuf à la Milanaise", desc: "Entrecôte de bœuf panée, spaghetti arrabbiata, parmesan", price: 9000, tags: ["house"], photo: "/photos/boeuf-milanaise.jpg" },
         { name: "Côte de Bœuf Braisée", desc: "Côte de bœuf mijotée sauce Paléo, purée de pommes de terre au pesto, légumes sautés", price: 10000, tags: ["house"] },
         { name: "Entrecôte de Bœuf", desc: "Entrecôte poêlée, purée de pommes de terre à l'ail rôti, légumes sautés, chimichurri, sauce aux champignons", price: 9500 },
         { name: "Médaillons de Filet Mignon", desc: "Médaillons de filet mignon, sauce et accompagnement au choix", price: 8500 },
@@ -425,6 +427,7 @@ export const dejeunerDiner: Book = {
       id: "bon-poulet",
       title: "Le Bon Poulet",
       tagline: "Poulet broasted, croustillant comme il faut",
+      gallery: ["/photos/tenders.jpg", "/photos/ailes-de-poulet.jpg", "/photos/nuggets.jpg"],
       note: "Supplément sauces : sauce piquante 750 F · moutarde au miel 750 F · BBQ sauce 750 F",
       items: [
         { name: "Poutine au Poulet", price: 6500, photo: "/photos/poutine.jpg" },
@@ -659,4 +662,30 @@ export function menuAsText(): string {
     }
   }
   return lines.join("\n");
+}
+
+/** Résout une ligne de panier « slug » ou « slug:0 / slug:1 » vers un plat et son prix serveur. */
+export function resolveCartKey(key: string): { item: FlatItem; price: number; label: string } | null {
+  const [slug, v] = key.split(":");
+  const item = findItem(slug);
+  if (!item) return null;
+  if (Array.isArray(item.price)) {
+    const idx = v === "1" ? 1 : 0;
+    const section = books.flatMap((b) => b.sections).find((s) => s.id === item.sectionId);
+    const labels = (section?.dual ?? "Moyenne / Grande").split("/").map((x) => x.trim());
+    return { item, price: item.price[idx], label: `${item.name} (${labels[idx] ?? ""})`.trim() };
+  }
+  if (v) return null;
+  return { item, price: item.price, label: item.name };
+}
+
+/** Sections commandables à table (pas les formules de réservation), dans l'ordre de service. */
+export function orderableSections(): { book: Book; section: Section }[] {
+  const seen = new Set<string>();
+  const out: { book: Book; section: Section }[] = [];
+  for (const book of books) for (const section of book.sections) {
+    if (seen.has(section.id)) continue;
+    seen.add(section.id); out.push({ book, section });
+  }
+  return out;
 }

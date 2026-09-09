@@ -1,89 +1,160 @@
 @import "tailwindcss";
 
 :root {
-  --bordeaux: #5c0c16;
-  --bordeaux-deep: #3b060c;
-  --bordeaux-soft: #7a1522;
-  --cream: #efdcc4;
-  --cream-soft: #f6eadb;
-  --gold: #d8bf94;
-  --gold-deep: #b9975f;
-  --ink: #2a1a16;
-  --background: var(--cream);
+  --paper: #fffaf3;
+  --marble: #f6efe4;
+  --ink: #2b2118;
+  --muted: #7d6b5d;
+  --honey: #f5b33b;
+  --honey-deep: #d8931a;
+  --wood: #ecc98a;
+  --candy: #ff4f7f;
+  --candy-soft: #ffdbe4;
+  --mint: #7fd1b0;
+  --mint-soft: #dcf5ea;
+  --sage: #5fa88b;
+  --azure: #8fd0ee;
+  --azure-soft: #e3f4fc;
+  --brass: #c9a253;
+  --cocoa: #4a2c1c;
+  --background: var(--paper);
   --foreground: var(--ink);
+  --sunrise: linear-gradient(115deg, #ff4f7f 0%, #ff8a5b 35%, #f5b33b 70%, #ffe27a 100%);
+  --candy-gradient: linear-gradient(120deg, #ff4f7f, #ff8fb3 40%, #8fd0ee 75%, #7fd1b0);
 }
 
 @theme inline {
-  --color-bordeaux: var(--bordeaux);
-  --color-bordeaux-deep: var(--bordeaux-deep);
-  --color-bordeaux-soft: var(--bordeaux-soft);
-  --color-cream: var(--cream);
-  --color-cream-soft: var(--cream-soft);
-  --color-gold: var(--gold);
-  --color-gold-deep: var(--gold-deep);
+  --color-paper: var(--paper);
+  --color-marble: var(--marble);
   --color-ink: var(--ink);
-  --font-display: var(--font-display), "Playfair Display", Georgia, serif;
+  --color-muted: var(--muted);
+  --color-honey: var(--honey);
+  --color-honey-deep: var(--honey-deep);
+  --color-wood: var(--wood);
+  --color-candy: var(--candy);
+  --color-candy-soft: var(--candy-soft);
+  --color-mint: var(--mint);
+  --color-mint-soft: var(--mint-soft);
+  --color-sage: var(--sage);
+  --color-azure: var(--azure);
+  --color-azure-soft: var(--azure-soft);
+  --color-brass: var(--brass);
+  --color-cocoa: var(--cocoa);
+  --font-display: var(--font-display), "Baloo 2", "Nunito", "Segoe UI", sans-serif;
   --font-sans: var(--font-sans), "Jost", "Helvetica Neue", Arial, sans-serif;
   --animate-rise: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
-  --animate-shimmer: shimmer 6s linear infinite;
-  --animate-float: float 8s ease-in-out infinite;
+  --animate-float: float 9s ease-in-out infinite;
+  --animate-blob: blob 18s ease-in-out infinite;
+  --animate-marquee: marquee 40s linear infinite;
+  --animate-pop: pop 0.45s cubic-bezier(0.2, 1.4, 0.4, 1) both;
+  --animate-wiggle: wiggle 0.6s ease-in-out;
+  --animate-ring: ring 1.8s ease-out infinite;
+  --animate-spin-slow: spin 14s linear infinite;
+  --animate-bounce-soft: bounceSoft 2.4s ease-in-out infinite;
 }
 
-@keyframes rise {
-  from { opacity: 0; transform: translateY(24px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes rise { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes shimmer { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+@keyframes float { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-16px) rotate(2deg); } }
+@keyframes blob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(6%, -8%) scale(1.15); }
+  66% { transform: translate(-7%, 6%) scale(0.92); }
 }
-@keyframes shimmer {
-  0% { background-position: 0% 50%; }
-  100% { background-position: 200% 50%; }
-}
-@keyframes float {
-  0%, 100% { transform: translateY(0) rotate(-2deg); }
-  50% { transform: translateY(-14px) rotate(2deg); }
-}
+@keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes pop { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: scale(1); } }
+@keyframes wiggle { 0%, 100% { transform: rotate(0); } 25% { transform: rotate(-12deg) scale(1.15); } 75% { transform: rotate(12deg) scale(1.15); } }
+@keyframes ring { 0% { box-shadow: 0 0 0 0 rgba(255, 79, 127, 0.55); } 100% { box-shadow: 0 0 0 18px rgba(255, 79, 127, 0); } }
+@keyframes bounceSoft { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes sweep { from { transform: translateX(-120%) skewX(-20deg); } to { transform: translateX(220%) skewX(-20deg); } }
+@keyframes pageIn { from { opacity: 0; } to { opacity: 1; } }
 
 html { scroll-behavior: smooth; }
-
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), "Jost", "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
 }
+.font-display { font-family: var(--font-display), "Baloo 2", "Nunito", sans-serif; }
 
-.font-display { font-family: var(--font-display), "Playfair Display", Georgia, serif; }
-
-/* Texture de velours bordeaux, inspirée de la carte imprimée */
-.velvet {
-  background-color: var(--bordeaux);
+/* Marbre clair + veines dorées, comme le sol de la salle */
+.marble {
+  background-color: var(--marble);
   background-image:
-    radial-gradient(ellipse at 20% 10%, rgba(255, 255, 255, 0.08), transparent 45%),
-    radial-gradient(ellipse at 85% 90%, rgba(0, 0, 0, 0.35), transparent 50%),
-    radial-gradient(ellipse at 60% 40%, rgba(122, 21, 34, 0.6), transparent 60%);
+    radial-gradient(ellipse at 15% 10%, rgba(255, 255, 255, 0.9), transparent 45%),
+    radial-gradient(ellipse at 85% 90%, rgba(245, 179, 59, 0.18), transparent 45%),
+    radial-gradient(ellipse at 60% 50%, rgba(255, 79, 127, 0.07), transparent 55%);
 }
-
-.gold-text {
-  background: linear-gradient(100deg, #b9975f 0%, #f1dfb7 35%, #d8bf94 50%, #f7ead0 65%, #b9975f 100%);
+.dots {
+  background-image: radial-gradient(rgba(43, 33, 24, 0.09) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+.sunrise-text {
+  background: var(--sunrise);
   background-size: 200% auto;
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  animation: var(--animate-shimmer);
+  animation: shimmer 5s linear infinite;
+}
+.candy-text {
+  background: var(--candy-gradient);
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 7s linear infinite;
+}
+.sunrise-bg { background: var(--sunrise); background-size: 200% auto; animation: shimmer 8s linear infinite; }
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.55;
+  animation: var(--animate-blob);
+  pointer-events: none;
 }
 
-.paper {
-  background-color: var(--cream);
-  background-image:
-    radial-gradient(ellipse at 10% 0%, rgba(255, 255, 255, 0.5), transparent 50%),
-    radial-gradient(ellipse at 90% 100%, rgba(185, 151, 95, 0.25), transparent 50%);
+.glass {
+  background: rgba(255, 250, 243, 0.78);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
 }
 
-.card-hover { transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s; }
-.card-hover:hover { transform: translateY(-4px); box-shadow: 0 24px 48px -20px rgba(59, 6, 12, 0.55); }
+.btn-shine { position: relative; overflow: hidden; }
+.btn-shine::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: 40%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.55), transparent);
+  transform: translateX(-120%) skewX(-20deg);
+}
+.btn-shine:hover::after { animation: sweep 0.8s ease forwards; }
 
+.card-hover { transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.4s; }
+.card-hover:hover { transform: translateY(-6px) rotate(-0.4deg); box-shadow: 0 30px 50px -24px rgba(74, 44, 28, 0.45); }
+.tilt { transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.tilt:hover { transform: rotate(-2deg) scale(1.03); }
+
+.reveal { opacity: 0; transform: translateY(28px) scale(0.985); transition: opacity 0.8s ease, transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.reveal.in { opacity: 1; transform: none; }
+
+.marquee { display: flex; width: max-content; animation: var(--animate-marquee); }
+.marquee:hover { animation-play-state: paused; }
+.marquee-reverse { animation-direction: reverse; }
+
+.page-enter { animation: pageIn 0.5s ease both; }
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { scrollbar-width: none; }
 
+@media print {
+  .no-print { display: none !important; }
+  body { background: white; }
+}
 @media (prefers-reduced-motion: reduce) {
-  .gold-text, .animate-float, .animate-rise { animation: none !important; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  .reveal { opacity: 1; transform: none; }
 }
