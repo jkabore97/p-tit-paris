@@ -61,7 +61,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             <div style={{ fontSize: 56, color: "#ff4f7f" }}>{item ? formatPrice(item.price) : ""}</div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
               <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <svg viewBox="0 0 100 100" width="44" height="44"><circle cx="50" cy="50" r="49" fill="#8c0f26" /><g fill="none" stroke="#fff2e4" strokeWidth="11" strokeLinecap="round" strokeLinejoin="round"><path d="M7 53.5 H57" /><path d="M35 53.5 V25 A13 13 0 0 1 61 25 V62" /><path d="M93 46.5 H43" /><path d="M65 46.5 V75 A13 13 0 0 1 39 75 V38" /></g></svg>
+                <svg viewBox="0 0 100 100" width="44" height="44"><circle cx="50" cy="50" r="49" fill="#8b1421" /><g fill="none" stroke="#d9c49d" strokeWidth="9.3" strokeLinecap="butt" strokeLinejoin="round"><path d="M10.5 54.2 H34 V68.7 A10.75 10.75 0 0 0 55.5 68.7 V50" /><path d="M44.5 50 V31.3 A10.75 10.75 0 0 1 66 31.3 V45.8 H89.5" /></g></svg>
                 <div style={{ fontSize: 30, color: "#5c0c16", letterSpacing: 3 }}>P&apos;TIT PARIS</div>
               </div>
               <div style={{ fontSize: 16, letterSpacing: 4, textTransform: "uppercase", color: "#ff4f7f" }}>Ouagadougou</div>

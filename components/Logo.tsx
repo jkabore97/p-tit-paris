@@ -1,6 +1,6 @@
 /**
- * Le médaillon P'tit Paris : une boucle verticale traversée par une barre, tel qu'il est
- * peint sur le mur de la salle (rose) et imprimé sur les étiquettes pâtisserie (rouge bordeaux).
+ * Le médaillon P'tit Paris, redessiné d'après le logo officiel : une onde faite d'un U et d'une
+ * arche décalés, barres plates de part et d'autre. Bordeaux et or sur fond clair, rose et blanc sur fond sombre.
  */
 export function Logo({
   className = "h-9 w-9",
@@ -10,16 +10,14 @@ export function Logo({
   /** wine : disque bordeaux, trait crème (étiquettes). pink : disque rose, trait blanc (mur de la salle). */
   variant?: "wine" | "pink";
 }) {
-  const disc = variant === "pink" ? "#ff7fa3" : "#8c0f26";
-  const ink = variant === "pink" ? "#ffffff" : "#fff2e4";
+  const disc = variant === "pink" ? "#ff7fa3" : "#8b1421";
+  const ink = variant === "pink" ? "#ffffff" : "#d9c49d";
   return (
     <svg viewBox="0 0 100 100" className={className} aria-hidden="true">
       <circle cx="50" cy="50" r="49" fill={disc} />
-      <g fill="none" stroke={ink} strokeWidth="11" strokeLinecap="round" strokeLinejoin="round">
-        <path d="M7 53.5 H57" />
-        <path d="M35 53.5 V25 A13 13 0 0 1 61 25 V62" />
-        <path d="M93 46.5 H43" />
-        <path d="M65 46.5 V75 A13 13 0 0 1 39 75 V38" />
+      <g fill="none" stroke={ink} strokeWidth="9.3" strokeLinecap="butt" strokeLinejoin="round">
+        <path d="M10.5 54.2 H34 V68.7 A10.75 10.75 0 0 0 55.5 68.7 V50" />
+        <path d="M44.5 50 V31.3 A10.75 10.75 0 0 1 66 31.3 V45.8 H89.5" />
       </g>
     </svg>
   );
