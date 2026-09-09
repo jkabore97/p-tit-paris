@@ -16,12 +16,12 @@ export default async function Image() {
   );
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", background: "#3b060c", color: "#efdcc4", fontFamily: "Georgia, serif" }}>
+      <div style={{ width: "100%", height: "100%", display: "flex", background: "linear-gradient(135deg,#fffaf3 0%,#ffdbe4 45%,#ffe7b3 100%)", color: "#2b2118", fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 800 }}>
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", padding: 64, width: 620 }}>
-          <div style={{ fontSize: 20, letterSpacing: 8, textTransform: "uppercase", color: "#d8bf94" }}>Le pari de vous faire plaisir</div>
+          <div style={{ fontSize: 20, letterSpacing: 8, textTransform: "uppercase", color: "#ff4f7f" }}>Le pari de vous faire plaisir</div>
           <div style={{ fontSize: 120, lineHeight: 0.95, marginTop: 24 }}>P&apos;tit Paris</div>
-          <div style={{ fontSize: 26, marginTop: 28, color: "#efdcc4cc" }}>Petit-déjeuner · Déjeuner & Dîner · Bar & Cave</div>
-          <div style={{ fontSize: 18, letterSpacing: 4, marginTop: 40, textTransform: "uppercase", color: "#d8bf94" }}>Gounghin · Ouagadougou</div>
+          <div style={{ fontSize: 26, marginTop: 28, color: "#7d6b5d" }}>Petit-déjeuner · Déjeuner & Dîner · Bar & Cave</div>
+          <div style={{ fontSize: 18, letterSpacing: 4, marginTop: 40, textTransform: "uppercase", color: "#ff4f7f" }}>Gounghin · Ouagadougou</div>
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", width: 580 }}>
           {data.map((src) => (

@@ -28,7 +28,7 @@ export function ReservationForm() {
 
   return (
     <div className="grid gap-8 md:grid-cols-[1.1fr_1fr]">
-      <form className="space-y-5 rounded-[2rem] border border-cream/10 bg-bordeaux-deep/60 p-6" onSubmit={(e) => e.preventDefault()}>
+      <form className="space-y-5 rounded-[2rem] bg-white p-6 shadow-xl ring-1 ring-ink/5" onSubmit={(e) => e.preventDefault()}>
         <Field label="Votre nom">
           <input value={f.name} onChange={set("name")} required className={inputCls} placeholder="Prénom et nom" />
         </Field>
@@ -42,7 +42,7 @@ export function ReservationForm() {
           <Field label="Heure">
             <select value={f.time} onChange={set("time")} className={inputCls}>
               {slots.map((s) => (
-                <option key={s} value={s} className="text-ink">
+                <option key={s} value={s} className="text-ink bg-white">
                   {s.replace(":", "h")}
                 </option>
               ))}
@@ -57,9 +57,9 @@ export function ReservationForm() {
         </Field>
       </form>
 
-      <div className="flex flex-col justify-between rounded-[2rem] bg-cream p-6 text-ink">
+      <div className="flex flex-col justify-between rounded-[2rem] bg-ink p-6 text-white shadow-2xl">
         <div>
-          <p className="text-xs uppercase tracking-[0.3em] text-bordeaux">Votre demande</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.3em] text-honey">Votre demande</p>
           <p className="font-display mt-4 text-2xl leading-snug">{message}</p>
         </div>
         <div className="mt-8 space-y-3">
@@ -76,7 +76,7 @@ export function ReservationForm() {
               Envoyer sur WhatsApp
             </a>
           ) : (
-            <p className="rounded-2xl border border-bordeaux/20 bg-bordeaux/5 p-4 text-sm">
+            <p className="rounded-2xl bg-white/10 p-4 text-sm text-white/80">
               Le bouton WhatsApp s&apos;active dès que <code>NEXT_PUBLIC_WHATSAPP_NUMBER</code> est renseigné sur Vercel. En attendant,
               copiez le message et envoyez-le au restaurant.
             </p>
@@ -84,11 +84,11 @@ export function ReservationForm() {
           <button
             onClick={copy}
             disabled={!ready}
-            className="block w-full rounded-full border border-bordeaux px-6 py-4 text-sm uppercase tracking-[0.2em] text-bordeaux transition hover:bg-bordeaux hover:text-cream disabled:opacity-40"
+            className="block w-full rounded-full bg-white px-6 py-4 text-sm font-semibold uppercase tracking-[0.2em] text-ink transition hover:bg-honey disabled:opacity-40"
           >
             {copied ? "Message copié ✓" : "Copier le message"}
           </button>
-          <p className="text-center text-xs text-ink/50">La réservation est confirmée par l&apos;équipe en retour.</p>
+          <p className="text-center text-xs text-white/50">La réservation est confirmée par l&apos;équipe en retour.</p>
         </div>
       </div>
     </div>
@@ -96,12 +96,12 @@ export function ReservationForm() {
 }
 
 const inputCls =
-  "w-full rounded-2xl border border-cream/20 bg-cream/5 px-4 py-3 text-cream placeholder:text-cream/40 focus:border-gold focus:outline-none [color-scheme:dark]";
+  "w-full rounded-2xl bg-marble px-4 py-3 text-ink placeholder:text-muted/70 focus:ring-2 focus:ring-candy focus:outline-none";
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block">
-      <span className="mb-1.5 block text-xs uppercase tracking-[0.2em] text-cream/60">{label}</span>
+      <span className="mb-1.5 block text-xs font-semibold uppercase tracking-[0.2em] text-muted">{label}</span>
       {children}
     </label>
   );

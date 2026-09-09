@@ -27,9 +27,9 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           width: "100%",
           height: "100%",
           display: "flex",
-          background: "linear-gradient(135deg,#3b060c 0%,#5c0c16 60%,#7a1522 100%)",
-          color: "#efdcc4",
-          fontFamily: "Georgia, serif",
+          background: "linear-gradient(135deg,#fffaf3 0%,#ffdbe4 45%,#ffe7b3 100%)",
+          color: "#2b2118",
+          fontFamily: "Arial, Helvetica, sans-serif", fontWeight: 800,
         }}
       >
         {photo && (
@@ -41,7 +41,7 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         )}
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", padding: 56, flex: 1 }}>
           <div style={{ display: "flex", flexDirection: "column" }}>
-            <div style={{ fontSize: 22, letterSpacing: 8, textTransform: "uppercase", color: "#d8bf94" }}>
+            <div style={{ fontSize: 22, letterSpacing: 8, textTransform: "uppercase", color: "#ff4f7f" }}>
               {item?.sectionTitle ?? "La carte"}
             </div>
             <div style={{ fontSize: item && item.name.length > 26 ? 52 : 68, lineHeight: 1.05, marginTop: 20 }}>
@@ -58,10 +58,10 @@ export default async function Image({ params }: { params: Promise<{ slug: string
             )}
           </div>
           <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end" }}>
-            <div style={{ fontSize: 56, color: "#d8bf94" }}>{item ? formatPrice(item.price) : ""}</div>
+            <div style={{ fontSize: 56, color: "#ff4f7f" }}>{item ? formatPrice(item.price) : ""}</div>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end" }}>
               <div style={{ fontSize: 30 }}>P&apos;tit Paris</div>
-              <div style={{ fontSize: 16, letterSpacing: 4, textTransform: "uppercase", color: "#d8bf94" }}>Ouagadougou</div>
+              <div style={{ fontSize: 16, letterSpacing: 4, textTransform: "uppercase", color: "#ff4f7f" }}>Ouagadougou</div>
             </div>
           </div>
         </div>

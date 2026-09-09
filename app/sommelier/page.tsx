@@ -10,20 +10,17 @@ export default async function SommelierPage({ searchParams }: PageProps<"/sommel
   const sp = await searchParams;
   const q = typeof sp.q === "string" ? sp.q : undefined;
   return (
-    <div className="velvet min-h-screen text-cream">
-      <div className="mx-auto max-w-3xl px-5 pb-24 pt-10">
-        <p className="text-xs uppercase tracking-[0.3em] text-gold">Le sommelier</p>
-        <h1 className="font-display mt-2 text-5xl md:text-6xl">Demandez, il compose.</h1>
-        <p className="mt-4 text-cream/70">
-          Accords mets-boissons, menus à budget, options végétariennes ou sans porc : il ne cite que ce qui est réellement sur la carte,
-          prix compris.
-        </p>
+    <div className="marble relative min-h-screen overflow-hidden">
+      <div className="blob right-[-10%] top-[-5%] h-[35vw] w-[35vw] bg-mint opacity-40" />
+      <div className="blob bottom-[-10%] left-[-10%] h-[35vw] w-[35vw] bg-candy opacity-30" style={{ animationDelay: "-8s" }} />
+      <div className="relative mx-auto max-w-3xl px-5 pb-28 pt-8">
+        <p className="text-xs font-semibold uppercase tracking-[0.3em] text-sage">Le sommelier</p>
+        <h1 className="font-display mt-2 text-5xl font-extrabold text-ink md:text-6xl">Demandez, il compose.</h1>
+        <p className="mt-4 text-muted">Accords mets-boissons, menus à budget, options végétariennes ou sans porc : il ne cite que ce qui est réellement sur la carte, prix compris.</p>
         <div className="mt-8">
           <Sommelier initialQuestion={q} />
         </div>
-        <p className="mt-4 text-xs text-cream/40">
-          Propulsé par Claude. Les conseils sont indicatifs ; l&apos;équipe en salle a toujours le dernier mot.
-        </p>
+        <p className="mt-4 text-xs text-muted">Propulsé par Claude. Les conseils sont indicatifs ; l&apos;équipe en salle a toujours le dernier mot.</p>
       </div>
     </div>
   );

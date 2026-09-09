@@ -69,17 +69,17 @@ export function Sommelier({ initialQuestion }: { initialQuestion?: string }) {
   }
 
   return (
-    <div className="flex flex-col rounded-[2rem] border border-cream/10 bg-bordeaux-deep/60">
+    <div className="flex flex-col rounded-[2rem] bg-white shadow-2xl ring-1 ring-ink/5">
       <div className="min-h-[360px] flex-1 space-y-5 overflow-y-auto p-6">
         {turns.length === 0 && (
           <div>
-            <p className="text-cream/70">Bonsoir. Dites-moi ce qui vous ferait plaisir, je connais chaque ligne de la carte.</p>
+            <p className="text-muted">Bonjour. Dites-moi ce qui vous ferait plaisir, je connais chaque ligne de la carte.</p>
             <div className="mt-5 flex flex-wrap gap-2">
               {suggestions.map((s) => (
                 <button
                   key={s}
                   onClick={() => ask(s)}
-                  className="rounded-full border border-gold/40 px-4 py-2 text-left text-sm text-gold transition hover:bg-gold hover:text-bordeaux-deep"
+                  className="rounded-full bg-mint-soft px-4 py-2 text-left text-sm font-medium text-sage transition hover:bg-mint hover:text-ink"
                 >
                   {s}
                 </button>
@@ -91,10 +91,10 @@ export function Sommelier({ initialQuestion }: { initialQuestion?: string }) {
           <div key={i} className={`flex ${t.role === "user" ? "justify-end" : "justify-start"}`}>
             <div
               className={`max-w-[85%] whitespace-pre-wrap rounded-3xl px-5 py-3 leading-relaxed ${
-                t.role === "user" ? "bg-gold text-bordeaux-deep" : "bg-cream/10 text-cream"
+                t.role === "user" ? "bg-candy text-white" : "bg-marble text-ink"
               }`}
             >
-              {t.content || <span className="inline-block h-4 w-8 animate-pulse rounded-full bg-cream/30" />}
+              {t.content || <span className="inline-block h-4 w-8 animate-pulse rounded-full bg-ink/20" />}
             </div>
           </div>
         ))}
@@ -106,17 +106,17 @@ export function Sommelier({ initialQuestion }: { initialQuestion?: string }) {
           e.preventDefault();
           void ask(input);
         }}
-        className="flex gap-2 border-t border-cream/10 p-4"
+        className="flex gap-2 border-t border-ink/10 p-4"
       >
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="Votre envie, votre budget, une question…"
-          className="flex-1 rounded-full border border-cream/20 bg-cream/5 px-5 py-3 text-cream placeholder:text-cream/40 focus:border-gold focus:outline-none"
+          className="flex-1 rounded-full bg-marble px-5 py-3 text-ink placeholder:text-muted/70 focus:ring-2 focus:ring-candy focus:outline-none"
         />
         <button
           disabled={busy || !input.trim()}
-          className="rounded-full bg-gold px-6 py-3 text-sm uppercase tracking-[0.15em] text-bordeaux-deep transition hover:bg-cream disabled:opacity-40"
+          className="btn-shine rounded-full bg-candy px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em] text-white transition hover:-translate-y-0.5 disabled:opacity-40"
         >
           {busy ? "…" : "Envoyer"}
         </button>
