@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "./Logo";
@@ -40,6 +41,9 @@ export function PinGate() {
         <button disabled={busy || pin.length < 4} className="btn-shine mt-5 w-full rounded-full bg-ink py-3.5 font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-candy disabled:opacity-40">
           {busy ? "…" : "Entrer"}
         </button>
+        <p className="mt-5 text-xs text-muted">
+          Vous gérez le restaurant ? <Link href="/admin" className="font-semibold text-wine hover:text-candy">Centre de contrôle →</Link>
+        </p>
       </form>
     </div>
   );
