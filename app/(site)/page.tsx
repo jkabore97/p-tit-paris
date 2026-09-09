@@ -6,8 +6,10 @@ import { Reveal } from "@/components/Reveal";
 import { Marquee } from "@/components/Marquee";
 import { Logo } from "@/components/Logo";
 import { HeroParallax } from "@/components/HeroParallax";
-import { books, formatPrice, signatureItems, allItems } from "@/lib/menu";
+import { formatPrice, signatureItems, allItems } from "@/lib/menu";
 import { site } from "@/lib/site";
+import { getMenu, getPosts, getSite } from "@/lib/content";
+import { AdCard, PartnersRow, PlatDuJourCard } from "@/components/PostCards";
 
 const interior = [
   { src: "/interior/grande-salle.jpg", alt: "La grande salle", w: 300 },
@@ -18,9 +20,15 @@ const interior = [
   { src: "/interior/buche-caramel.jpg", alt: "Bûche caramel", w: 420 },
 ];
 
-export default function Home() {
-  const signatures = signatureItems().slice(0, 6);
-  const ticker = allItems().filter((i) => i.photo).slice(0, 26);
+export const dynamic = "force-dynamic";
+
+export default async function Home() {
+  const [books, posts, siteData] = await Promise.all([getMenu(), getPosts(), getSite()]);
+  const plat = posts.find((p) => p.kind === "plat_du_jour");
+  const partners = posts.filter((p) => p.kind === "partenaire");
+  const ads = posts.filter((p) => p.kind === "pub");
+  const signatures = signatureItems(books).slice(0, 6);
+  const ticker = allItems(books).filter((i) => i.photo && i.available !== false).slice(0, 26);
   const totalDishes = books.reduce((n, b) => n + b.sections.reduce((m, s) => m + s.items.length, 0), 0);
 
   return (
@@ -39,7 +47,7 @@ export default function Home() {
             <span className="absolute inset-0 -z-10 animate-ring rounded-full" />
           </div>
           <p className="animate-rise mt-6 text-xs font-semibold uppercase tracking-[0.4em] text-wine" style={{ animationDelay: ".1s" }}>
-            {site.tagline}
+            {siteData.tagline}
           </p>
           <h1 className="font-display animate-rise mt-3 text-[18vw] font-extrabold leading-[0.82] tracking-tight md:text-[9.5rem]" style={{ animationDelay: ".2s" }}>
             <span className="sunrise-text">P&apos;tit</span>
@@ -81,6 +89,34 @@ export default function Home() {
           ))}
         </Marquee>
       </div>
+
+      {/* ---------------------------------------------------------- PLAT DU JOUR & À LA UNE */}
+      {(plat || ads.length > 0) && (
+        <section className="relative overflow-hidden py-16">
+          <div className="mx-auto max-w-6xl space-y-10 px-5">
+            {plat && (
+              <Reveal>
+                <p className="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-wine">☀️ Aujourd&apos;hui</p>
+                <PlatDuJourCard post={plat} />
+              </Reveal>
+            )}
+            {ads.length > 0 && (
+              <div>
+                <Reveal>
+                  <p className="mb-4 text-xs font-semibold uppercase tracking-[0.3em] text-wine">✨ En ce moment</p>
+                </Reveal>
+                <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                  {ads.slice(0, 6).map((a, i) => (
+                    <Reveal key={a.id} delay={i * 90}>
+                      <AdCard post={a} index={i} />
+                    </Reveal>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </section>
+      )}
 
       {/* ---------------------------------------------------------- QR ORDERING */}
       <section className="relative overflow-hidden py-24">
@@ -226,6 +262,18 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* ---------------------------------------------------------- PARTENAIRES */}
+      {partners.length > 0 && (
+        <section className="py-12">
+          <Reveal className="mx-auto max-w-6xl px-5 text-center">
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-muted">🤝 Ils nous accompagnent</p>
+            <div className="mt-5">
+              <PartnersRow posts={partners} />
+            </div>
+          </Reveal>
+        </section>
+      )}
 
       {/* ---------------------------------------------------------- SOMMELIER */}
       <section className="py-20">

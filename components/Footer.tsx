@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Logo, Wordmark } from "./Logo";
 import { site } from "@/lib/site";
+import type { ResolvedSite } from "@/lib/content";
 
-export function Footer() {
+export function Footer({ site: data }: { site: ResolvedSite }) {
   return (
     <footer className="relative mt-10">
       <div className="sunrise-bg px-5 py-10 text-white">
@@ -23,11 +24,12 @@ export function Footer() {
               <Logo className="h-11 w-11" variant="pink" />
               <div>
                 <p className="text-white"><Wordmark className="text-xl" /></p>
-                <p className="text-xs uppercase tracking-[0.25em] text-honey">{site.tagline}</p>
+                <p className="text-xs uppercase tracking-[0.25em] text-honey">{data.tagline}</p>
               </div>
             </div>
             <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/70">
-              {site.neighbourhood}, {site.city}. Petit-déjeuner dès 6h30, déjeuner et dîner, pâtisserie, cocktails et cave jusque tard.
+              {data.address || `${site.neighbourhood}, ${site.city}`}. {data.hours || "Petit-déjeuner dès 6h30, déjeuner et dîner, pâtisserie, cocktails et cave jusque tard."}
+              {data.phone && <span className="mt-2 block font-semibold text-white">{data.phone}</span>}
             </p>
           </div>
           <div>
@@ -43,7 +45,7 @@ export function Footer() {
           <div>
             <p className="text-xs uppercase tracking-[0.25em] text-honey">Suivez-nous</p>
             <ul className="mt-4 flex flex-wrap gap-2">
-              {site.socials.map((s, i) => (
+              {data.socials.map((s, i) => (
                 <li key={s.label}>
                   <a
                     className={`inline-block rounded-full px-4 py-1.5 text-sm font-medium transition hover:-translate-y-0.5 ${["bg-candy-soft text-candy", "bg-mint-soft text-sage", "bg-azure-soft text-sky-700", "bg-wood/60 text-cocoa"][i % 4]}`}

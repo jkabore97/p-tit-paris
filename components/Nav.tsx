@@ -4,7 +4,6 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Logo, Wordmark } from "./Logo";
-import { site } from "@/lib/site";
 import { useCart } from "@/lib/cart";
 
 const links = [

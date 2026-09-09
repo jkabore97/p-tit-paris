@@ -5,7 +5,9 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { AddButton } from "./AddButton";
-import { books, formatPrice, slugify, TAG_LABEL, type Book, type FlatItem, type Tag } from "@/lib/menu";
+import { formatPrice, slugify, TAG_LABEL, type Book, type FlatItem, type Tag } from "@/lib/menu";
+import type { Post } from "@/lib/types";
+import { AdCard } from "./PostCards";
 
 const TAGS: Tag[] = ["house", "veg", "spicy"];
 const tints = ["bg-candy-soft/60", "bg-mint-soft/70", "bg-azure-soft/70", "bg-wood/40"];
@@ -14,7 +16,7 @@ function normalize(s: string) {
   return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }
 
-export function MenuExplorer({ initialBook, initialTag }: { initialBook?: string; initialTag?: string }) {
+export function MenuExplorer({ books, ads = [], initialBook, initialTag }: { books: Book[]; ads?: Post[]; initialBook?: string; initialTag?: string }) {
   const router = useRouter();
   const params = useSearchParams();
   const [bookId, setBookId] = useState<Book["id"]>((books.find((b) => b.id === initialBook)?.id ?? "diner") as Book["id"]);
@@ -24,7 +26,7 @@ export function MenuExplorer({ initialBook, initialTag }: { initialBook?: string
   const [active, setActive] = useState<string>("");
   const railRef = useRef<HTMLDivElement>(null);
 
-  const book = books.find((b) => b.id === bookId)!;
+  const book = books.find((b) => b.id === bookId) ?? books[0];
 
   useEffect(() => {
     const next = new URLSearchParams(params.toString());
@@ -137,7 +139,13 @@ export function MenuExplorer({ initialBook, initialTag }: { initialBook?: string
 
       <div className="mt-4 space-y-14">
         {sections.map((s, si) => (
-          <section key={s.id} id={`sec-${s.id}`} className={`scroll-mt-40 rounded-[2rem] p-5 md:p-8 ${tints[si % tints.length]}`}>
+          <div key={s.id} className="space-y-14">
+          {si === 2 && ads.length > 0 && (
+            <div className="grid gap-4 md:grid-cols-3">
+              {ads.slice(0, 3).map((a, i) => <AdCard key={a.id} post={a} index={i} />)}
+            </div>
+          )}
+          <section id={`sec-${s.id}`} className={`scroll-mt-40 rounded-[2rem] p-5 md:p-8 ${tints[si % tints.length]}`}>
             <div className="flex flex-wrap items-baseline justify-between gap-2">
               <h2 className="font-display text-3xl font-extrabold text-ink md:text-4xl">{s.title}</h2>
               {s.tagline && <p className="font-display text-sm italic text-candy">{s.tagline}</p>}
@@ -154,10 +162,10 @@ export function MenuExplorer({ initialBook, initialTag }: { initialBook?: string
             )}
             <ul className="mt-6 grid gap-3 md:grid-cols-2">
               {s.items.map((it) => {
-                const slug = slugify(it.name);
+                const slug = it.slug ?? slugify(it.name);
                 const flat: FlatItem = { ...it, slug, sectionId: s.id, sectionTitle: s.title, bookId: book.id, bookTitle: book.title };
                 return (
-                  <li key={slug} className="card-hover group flex gap-4 rounded-3xl bg-white p-3 shadow-sm ring-1 ring-ink/5">
+                  <li key={slug} className={`card-hover group flex gap-4 rounded-3xl bg-white p-3 shadow-sm ring-1 ring-ink/5 ${it.available === false ? "opacity-60" : ""}`}>
                     <Link href={`/menu/${slug}`} className="relative h-24 w-24 shrink-0 overflow-hidden rounded-2xl bg-marble">
                       {it.photo && <Image src={it.photo} alt="" fill sizes="96px" className="object-cover transition duration-500 group-hover:scale-110" />}
                     </Link>
@@ -182,6 +190,7 @@ export function MenuExplorer({ initialBook, initialTag }: { initialBook?: string
             </ul>
             {s.note && <p className="mt-4 text-xs leading-relaxed text-muted">{s.note}</p>}
           </section>
+          </div>
         ))}
       </div>
     </div>

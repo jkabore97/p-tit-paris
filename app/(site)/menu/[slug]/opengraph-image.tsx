@@ -1,7 +1,9 @@
 import { ImageResponse } from "next/og";
 import { readFile } from "node:fs/promises";
 import path from "node:path";
+import { getMenu } from "@/lib/content";
 import { findItem, formatPrice, TAG_LABEL } from "@/lib/menu";
+import { db } from "@/lib/db";
 
 export const alt = "P'tit Paris";
 export const size = { width: 1200, height: 630 };
@@ -9,12 +11,17 @@ export const contentType = "image/png";
 
 export default async function Image({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const item = findItem(slug);
+  const item = findItem(await getMenu(), slug);
   let photo: string | null = null;
   if (item?.photo) {
     try {
-      const buf = await readFile(path.join(process.cwd(), "public", item.photo));
-      photo = `data:image/jpeg;base64,${buf.toString("base64")}`;
+      if (item.photo.startsWith("/media/")) {
+        const m = await db.mediaGet(item.photo.slice(7));
+        if (m) photo = `data:${m.mime};base64,${m.data}`;
+      } else if (item.photo.startsWith("/")) {
+        const buf = await readFile(path.join(process.cwd(), "public", item.photo));
+        photo = `data:image/jpeg;base64,${buf.toString("base64")}`;
+      }
     } catch {
       photo = null;
     }

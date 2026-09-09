@@ -1,5 +1,6 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { SOMMELIER_MODEL, SOMMELIER_SYSTEM } from "@/lib/sommelier";
+import { getMenu } from "@/lib/content";
+import { SOMMELIER_MODEL, sommelierSystem } from "@/lib/sommelier";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -28,6 +29,7 @@ export async function POST(req: Request) {
     return Response.json({ error: "Il manque votre question." }, { status: 400 });
   }
 
+  const system = sommelierSystem(await getMenu());
   const client = new Anthropic();
   const messages: Anthropic.MessageParam[] = turns.map((t) => ({ role: t.role, content: t.content }));
 
@@ -36,7 +38,7 @@ export async function POST(req: Request) {
     max_tokens: 1500,
     thinking: { type: "adaptive" },
     output_config: { effort: "low" },
-    system: [{ type: "text", text: SOMMELIER_SYSTEM, cache_control: { type: "ephemeral" } }],
+    system: [{ type: "text", text: system, cache_control: { type: "ephemeral" } }],
     messages,
   });
 

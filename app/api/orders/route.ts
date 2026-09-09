@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { db, type OrderLine } from "@/lib/db";
+import { getMenu, getPosts } from "@/lib/content";
 import { resolveCartKey } from "@/lib/menu";
 
 export const runtime = "nodejs";
@@ -19,13 +20,21 @@ export async function POST(req: Request) {
   if (name.length < 1 || name.length > 60) return NextResponse.json({ error: "Indiquez votre prénom" }, { status: 400 });
   if (!Array.isArray(body.lines) || body.lines.length === 0) return NextResponse.json({ error: "Votre commande est vide" }, { status: 400 });
 
-  // Les prix viennent du serveur, jamais du client.
+  // Les prix viennent du serveur (carte en base + plat du jour), jamais du client.
+  const [books, posts] = await Promise.all([getMenu(), getPosts()]);
   const items: OrderLine[] = [];
   for (const l of body.lines.slice(0, 40)) {
+    const key = String(l.key);
     const qty = Math.min(20, Math.max(1, Math.floor(Number(l.qty) || 0)));
-    const r = resolveCartKey(String(l.key));
-    if (!r) return NextResponse.json({ error: `Plat inconnu : ${l.key}` }, { status: 400 });
-    items.push({ key: String(l.key), slug: r.item.slug, name: r.label, qty, price: r.price });
+    if (key.startsWith("post:")) {
+      const post = posts.find((p) => p.id === key.slice(5) && p.kind === "plat_du_jour" && p.price != null);
+      if (!post) return NextResponse.json({ error: "Ce plat du jour n'est plus disponible" }, { status: 400 });
+      items.push({ key, slug: `post-${post.id}`, name: `Plat du jour · ${post.title}`, qty, price: post.price! });
+      continue;
+    }
+    const r = resolveCartKey(books, key);
+    if (!r) return NextResponse.json({ error: `Plat indisponible : ${key}` }, { status: 400 });
+    items.push({ key, slug: r.item.slug, name: r.label, qty, price: r.price });
   }
   try {
     const order = await db.placeOrder(table, name, items, body.note?.slice(0, 300));

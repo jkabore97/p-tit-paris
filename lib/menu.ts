@@ -7,13 +7,18 @@
 export type Tag = "house" | "veg" | "spicy";
 
 export type Item = {
+  /** Identifiant base (absent pour la carte statique). */
+  id?: string;
+  slug?: string;
   name: string;
   desc?: string;
   /** Prix unique, ou [moyenne, grande] / [verre, bouteille]. */
   price: number | [number, number];
   tags?: Tag[];
-  /** Chemin public de la photo (extraite de la carte). */
+  /** Chemin public de la photo (extraite de la carte) ou /media/<id>. */
   photo?: string;
+  /** false = en rupture (affiché barré, non commandable). */
+  available?: boolean;
 };
 
 export type Section = {
@@ -602,15 +607,122 @@ export const books: Book[] = [petitDejeuner, dejeunerDiner, barCave];
 export function slugify(s: string): string {
   return s
     .normalize("NFD")
-    .replace(/[̀-ͯ]/g, "")
+    .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/(^-|-$)/g, "");
 }
 
 export function formatPrice(p: number | [number, number]): string {
-  const f = (n: number) => n.toLocaleString("fr-FR").replace(/ | /g, " ") + " F";
+  const f = (n: number) => n.toLocaleString("fr-FR").replace(/[\u202f\u00a0]/g, " ") + " F";
   return Array.isArray(p) ? `${f(p[0])} / ${f(p[1])}` : f(p);
+}
+
+export const BOOK_IDS: Book["id"][] = ["dej", "diner", "bar"];
+export const BOOK_META: Record<Book["id"], { title: string; subtitle: string; hours: string }> = {
+  dej: { title: petitDejeuner.title, subtitle: petitDejeuner.subtitle, hours: petitDejeuner.hours },
+  diner: { title: dejeunerDiner.title, subtitle: dejeunerDiner.subtitle, hours: dejeunerDiner.hours },
+  bar: { title: barCave.title, subtitle: barCave.subtitle, hours: barCave.hours },
+};
+
+/* ------------------------------------------------------------------ */
+/* Carte en base (éditable depuis /admin)                              */
+/* ------------------------------------------------------------------ */
+
+export type DbItem = {
+  id: string;
+  slug: string;
+  name: string;
+  description: string | null;
+  price: number;
+  price2: number | null;
+  tags: string[];
+  photo: string | null;
+  position: number;
+  available: boolean;
+  visible: boolean;
+};
+
+export type DbSection = {
+  id: string;
+  books: Book["id"][];
+  title: string;
+  tagline: string | null;
+  note: string | null;
+  dual: string | null;
+  gallery: string[];
+  position: number;
+  visible: boolean;
+  items: DbItem[];
+};
+
+/** Construit les trois cartes affichées à partir des rubriques en base (rubriques et plats masqués exclus). */
+export function booksFromSections(sections: DbSection[]): Book[] {
+  return BOOK_IDS.map((id) => ({
+    id,
+    ...BOOK_META[id],
+    sections: sections
+      .filter((s) => s.visible && s.books.includes(id))
+      .sort((a, b) => a.position - b.position)
+      .map<Section>((s) => ({
+        id: s.id,
+        title: s.title,
+        tagline: s.tagline ?? undefined,
+        note: s.note ?? undefined,
+        dual: s.dual ?? undefined,
+        gallery: s.gallery?.length ? s.gallery : undefined,
+        items: s.items
+          .filter((i) => i.visible)
+          .sort((a, b) => a.position - b.position)
+          .map<Item>((i) => ({
+            id: i.id,
+            slug: i.slug,
+            name: i.name,
+            desc: i.description ?? undefined,
+            price: i.price2 != null ? ([i.price, i.price2] as [number, number]) : i.price,
+            tags: i.tags.length ? (i.tags as Tag[]) : undefined,
+            photo: i.photo ?? undefined,
+            available: i.available,
+          })),
+      }))
+      .filter((s) => s.items.length > 0),
+  }));
+}
+
+/** La carte imprimée sous forme de rubriques base, pour l'amorçage et le mode bac à sable. */
+export function seedSections(): DbSection[] {
+  const out = new Map<string, DbSection>();
+  const seenSlugs = new Set<string>();
+  let pos = 0;
+  for (const b of books) {
+    for (const s of b.sections) {
+      let sec = out.get(s.id);
+      if (!sec) {
+        sec = { id: s.id, books: [], title: s.title, tagline: s.tagline ?? null, note: s.note ?? null, dual: s.dual ?? null, gallery: s.gallery ?? [], position: pos++, visible: true, items: [] };
+        out.set(s.id, sec);
+      }
+      if (!sec.books.includes(b.id)) sec.books.push(b.id);
+      for (const it of s.items) {
+        const slug = slugify(it.name);
+        if (seenSlugs.has(slug)) continue;
+        seenSlugs.add(slug);
+        sec.items.push({
+          id: `seed-${slug}`,
+          slug,
+          name: it.name,
+          description: it.desc ?? null,
+          price: Array.isArray(it.price) ? it.price[0] : it.price,
+          price2: Array.isArray(it.price) ? it.price[1] : null,
+          tags: it.tags ?? [],
+          photo: it.photo ?? null,
+          position: sec.items.length,
+          available: true,
+          visible: true,
+        });
+      }
+    }
+  }
+  return [...out.values()];
 }
 
 export type FlatItem = Item & {
@@ -621,14 +733,14 @@ export type FlatItem = Item & {
   bookTitle: string;
 };
 
-/** Tous les plats, dédupliqués par slug (les sections partagées apparaissent une seule fois). */
-export function allItems(): FlatItem[] {
+/** Tous les plats d'un jeu de cartes, dédupliqués par slug (les rubriques partagées apparaissent une seule fois). */
+export function allItems(source: Book[]): FlatItem[] {
   const seen = new Set<string>();
   const out: FlatItem[] = [];
-  for (const book of books) {
+  for (const book of source) {
     for (const section of book.sections) {
       for (const item of section.items) {
-        const slug = slugify(item.name);
+        const slug = item.slug ?? slugify(item.name);
         if (seen.has(slug)) continue;
         seen.add(slug);
         out.push({ ...item, slug, sectionId: section.id, sectionTitle: section.title, bookId: book.id, bookTitle: book.title });
@@ -638,24 +750,25 @@ export function allItems(): FlatItem[] {
   return out;
 }
 
-export function findItem(slug: string): FlatItem | undefined {
-  return allItems().find((i) => i.slug === slug);
+export function findItem(source: Book[], slug: string): FlatItem | undefined {
+  return allItems(source).find((i) => i.slug === slug);
 }
 
-/** Plats mis en avant (spécialités maison avec photo). */
-export function signatureItems(): FlatItem[] {
-  return allItems().filter((i) => i.photo && i.tags?.includes("house"));
+/** Plats mis en avant (spécialités maison avec photo, disponibles). */
+export function signatureItems(source: Book[]): FlatItem[] {
+  return allItems(source).filter((i) => i.photo && i.tags?.includes("house") && i.available !== false);
 }
 
-/** Texte compact de la carte pour le sommelier IA. */
-export function menuAsText(): string {
+/** Texte compact de la carte pour le sommelier IA (plats en rupture exclus). */
+export function menuAsText(source: Book[]): string {
   const lines: string[] = [];
-  for (const book of books) {
+  for (const book of source) {
     lines.push(`# ${book.title} (${book.hours})`);
     for (const section of book.sections) {
       lines.push(`## ${section.title}${section.dual ? ` (${section.dual})` : ""}`);
       if (section.note) lines.push(`(${section.note})`);
       for (const it of section.items) {
+        if (it.available === false) continue;
         const tags = it.tags?.map((t) => TAG_LABEL[t].label).join(", ");
         lines.push(`- ${it.name} — ${formatPrice(it.price)}${it.desc ? ` : ${it.desc}` : ""}${tags ? ` [${tags}]` : ""}`);
       }
@@ -665,13 +778,13 @@ export function menuAsText(): string {
 }
 
 /** Résout une ligne de panier « slug » ou « slug:0 / slug:1 » vers un plat et son prix serveur. */
-export function resolveCartKey(key: string): { item: FlatItem; price: number; label: string } | null {
+export function resolveCartKey(source: Book[], key: string): { item: FlatItem; price: number; label: string } | null {
   const [slug, v] = key.split(":");
-  const item = findItem(slug);
-  if (!item) return null;
+  const item = findItem(source, slug);
+  if (!item || item.available === false) return null;
   if (Array.isArray(item.price)) {
     const idx = v === "1" ? 1 : 0;
-    const section = books.flatMap((b) => b.sections).find((s) => s.id === item.sectionId);
+    const section = source.flatMap((b) => b.sections).find((s) => s.id === item.sectionId);
     const labels = (section?.dual ?? "Moyenne / Grande").split("/").map((x) => x.trim());
     return { item, price: item.price[idx], label: `${item.name} (${labels[idx] ?? ""})`.trim() };
   }
@@ -679,13 +792,15 @@ export function resolveCartKey(key: string): { item: FlatItem; price: number; la
   return { item, price: item.price, label: item.name };
 }
 
-/** Sections commandables à table (pas les formules de réservation), dans l'ordre de service. */
-export function orderableSections(): { book: Book; section: Section }[] {
+/** Rubriques commandables à table, dans l'ordre de service, sans doublon. */
+export function orderableSections(source: Book[]): { book: Book; section: Section }[] {
   const seen = new Set<string>();
   const out: { book: Book; section: Section }[] = [];
-  for (const book of books) for (const section of book.sections) {
-    if (seen.has(section.id)) continue;
-    seen.add(section.id); out.push({ book, section });
-  }
+  for (const book of source)
+    for (const section of book.sections) {
+      if (seen.has(section.id)) continue;
+      seen.add(section.id);
+      out.push({ book, section });
+    }
   return out;
 }
