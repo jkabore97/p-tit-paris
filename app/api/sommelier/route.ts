@@ -1,5 +1,5 @@
 import Anthropic from "@anthropic-ai/sdk";
-import { getMenu } from "@/lib/content";
+import { getMenu, getSite } from "@/lib/content";
 import { SOMMELIER_MODEL, sommelierSystem } from "@/lib/sommelier";
 
 export const runtime = "nodejs";
@@ -29,7 +29,8 @@ export async function POST(req: Request) {
     return Response.json({ error: "Il manque votre question." }, { status: 400 });
   }
 
-  const system = sommelierSystem(await getMenu());
+  const [menuBooks, siteData] = await Promise.all([getMenu(), getSite()]);
+  const system = sommelierSystem(menuBooks, siteData.tagline);
   const client = new Anthropic();
   const messages: Anthropic.MessageParam[] = turns.map((t) => ({ role: t.role, content: t.content }));
 
