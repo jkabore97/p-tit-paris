@@ -25,6 +25,7 @@ export function DishCard({ item, priority = false, index = 0 }: { item: FlatItem
           <span className="absolute bottom-4 right-4 rounded-full bg-white px-3 py-1 font-display text-base font-bold text-candy shadow-lg">
             {formatPrice(item.price)}
           </span>
+          {item.available === false && <span className="absolute inset-0 grid place-items-center bg-white/60 font-display text-2xl font-extrabold uppercase tracking-[0.2em] text-ink">Épuisé</span>}
         </div>
       </Link>
       <div className="p-5">

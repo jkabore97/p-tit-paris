@@ -1,11 +1,10 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { site } from "@/lib/site";
 
 const slots = ["07:00", "08:00", "09:30", "12:00", "12:30", "13:00", "13:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30"];
 
-export function ReservationForm() {
+export function ReservationForm({ whatsapp }: { whatsapp: string }) {
   const today = new Date().toISOString().slice(0, 10);
   const [f, setF] = useState({ name: "", phone: "", date: today, time: "20:00", guests: 2, note: "" });
   const set = (k: keyof typeof f) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
@@ -17,7 +16,7 @@ export function ReservationForm() {
   }, [f]);
 
   const ready = f.name.trim().length > 1 && f.date && f.time && f.guests > 0;
-  const wa = site.whatsapp ? `https://wa.me/${site.whatsapp}?text=${encodeURIComponent(message)}` : null;
+  const wa = whatsapp ? `https://wa.me/${whatsapp}?text=${encodeURIComponent(message)}` : null;
   const [copied, setCopied] = useState(false);
 
   async function copy() {

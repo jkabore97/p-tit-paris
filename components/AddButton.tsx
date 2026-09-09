@@ -17,6 +17,10 @@ export function AddButton({ item, dual, size = "sm" }: { item: FlatItem; dual?: 
     setTimeout(() => setFlash(null), 500);
   }
 
+  if (item.available === false) {
+    return <span className={`inline-block rounded-full bg-marble px-3.5 py-1.5 text-xs font-semibold uppercase tracking-[0.15em] text-muted ${size === "lg" ? "px-6 py-3 text-sm" : ""}`}>Épuisé</span>;
+  }
+
   const base =
     size === "lg"
       ? "rounded-full px-6 py-3 text-sm font-semibold uppercase tracking-[0.15em]"

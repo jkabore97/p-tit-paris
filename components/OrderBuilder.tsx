@@ -4,14 +4,16 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { cart, useCart } from "@/lib/cart";
-import { formatPrice, orderableSections, slugify, TAG_LABEL, type FlatItem } from "@/lib/menu";
+import { formatPrice, orderableSections, slugify, TAG_LABEL, type Book, type FlatItem } from "@/lib/menu";
+import type { Post } from "@/lib/types";
+import { PlatDuJourCard } from "./PostCards";
 import { AddButton } from "./AddButton";
 
 function normalize(s: string) {
   return s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 }
 
-export function OrderBuilder({ tableFromUrl }: { tableFromUrl: number | null }) {
+export function OrderBuilder({ books, platDuJour, tableFromUrl }: { books: Book[]; platDuJour: Post | null; tableFromUrl: number | null }) {
   const router = useRouter();
   const { lines, table, name, count, total } = useCart();
   const [query, setQuery] = useState("");
@@ -29,14 +31,14 @@ export function OrderBuilder({ tableFromUrl }: { tableFromUrl: number | null }) 
 
   const groups = useMemo(
     () =>
-      orderableSections()
+      orderableSections(books)
         .map(({ book, section }) => ({
           book,
           section,
-          items: section.items.filter((it) => !q || normalize(`${it.name} ${it.desc ?? ""} ${section.title}`).includes(q)),
+          items: section.items.filter((it) => it.available !== false && (!q || normalize(`${it.name} ${it.desc ?? ""} ${section.title}`).includes(q))),
         }))
         .filter((g) => g.items.length > 0),
-    [q],
+    [books, q],
   );
 
   useEffect(() => {
@@ -129,6 +131,12 @@ export function OrderBuilder({ tableFromUrl }: { tableFromUrl: number | null }) 
         {query && <button onClick={() => setQuery("")} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted" aria-label="Effacer">✕</button>}
       </label>
 
+      {platDuJour && platDuJour.price != null && !q && (
+        <div className="mt-6">
+          <PlatDuJourCard post={platDuJour} compact />
+        </div>
+      )}
+
       <div className="glass sticky top-14 z-30 -mx-5 mt-5 px-5 py-3 md:top-16">
         <div ref={railRef} className="no-scrollbar flex gap-2 overflow-x-auto">
           {groups.map((g) => (
@@ -149,7 +157,7 @@ export function OrderBuilder({ tableFromUrl }: { tableFromUrl: number | null }) 
             {g.section.dual && <p className="text-xs font-semibold uppercase tracking-[0.2em] text-muted">{g.section.dual}</p>}
             <ul className="mt-4 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
               {g.items.map((it) => {
-                const slug = slugify(it.name);
+                const slug = it.slug ?? slugify(it.name);
                 const flat: FlatItem = { ...it, slug, sectionId: g.section.id, sectionTitle: g.section.title, bookId: g.book.id, bookTitle: g.book.title };
                 return (
                   <li key={slug} className="card-hover flex gap-3 rounded-3xl bg-white p-3 shadow-sm ring-1 ring-ink/5">

@@ -7,25 +7,25 @@ import { Logo } from "@/components/Logo";
 import { DishCard } from "@/components/DishCard";
 import { Reveal } from "@/components/Reveal";
 import { ShareButton } from "@/components/ShareButton";
-import { allItems, books, findItem, formatPrice, TAG_LABEL } from "@/lib/menu";
+import { getMenu } from "@/lib/content";
+import { allItems, findItem, formatPrice, TAG_LABEL } from "@/lib/menu";
 
-export function generateStaticParams() {
-  return allItems().map((i) => ({ slug: i.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata({ params }: PageProps<"/menu/[slug]">): Promise<Metadata> {
   const { slug } = await params;
-  const item = findItem(slug);
+  const item = findItem(await getMenu(), slug);
   if (!item) return {};
   return { title: item.name, description: `${item.desc ?? item.sectionTitle} — ${formatPrice(item.price)} chez P'tit Paris, Ouagadougou.` };
 }
 
 export default async function DishPage({ params }: PageProps<"/menu/[slug]">) {
   const { slug } = await params;
-  const item = findItem(slug);
+  const books = await getMenu();
+  const item = findItem(books, slug);
   if (!item) notFound();
   const section = books.flatMap((b) => b.sections).find((s) => s.id === item.sectionId);
-  const siblings = allItems().filter((i) => i.sectionId === item.sectionId && i.slug !== item.slug && i.photo).slice(0, 3);
+  const siblings = allItems(books).filter((i) => i.sectionId === item.sectionId && i.slug !== item.slug && i.photo).slice(0, 3);
 
   return (
     <div className="marble min-h-screen">
@@ -50,7 +50,10 @@ export default async function DishPage({ params }: PageProps<"/menu/[slug]">) {
               ))}
             </div>
             <h1 className="font-display mt-4 text-4xl font-extrabold leading-tight text-ink md:text-6xl">{item.name}</h1>
-            <p className="font-display mt-4 text-3xl font-bold text-candy">{formatPrice(item.price)}</p>
+            <p className="font-display mt-4 text-3xl font-bold text-candy">
+              {formatPrice(item.price)}
+              {item.available === false && <span className="ml-3 rounded-full bg-ink px-3 py-1 align-middle text-xs uppercase tracking-[0.2em] text-white">Épuisé aujourd&apos;hui</span>}
+            </p>
             {item.desc && <p className="mt-6 text-lg leading-relaxed text-muted">{item.desc}</p>}
             <div className="mt-8">
               <AddButton item={item} dual={section?.dual} size="lg" />

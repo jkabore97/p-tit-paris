@@ -13,8 +13,22 @@ Site Next.js (App Router) pensé pour Vercel, pour P'tit Paris, Gounghin, Ouagad
 | `/commande/[id]` | Suivi en direct de la commande : reçue → en cuisine → prête → servie, annulation tant que la cuisine n'a pas commencé. |
 | `/cuisine` | **Écran équipe** (PIN). Tableau des commandes en 3 colonnes, chrono par commande, alerte sonore à chaque nouvelle commande, changement de statut en un tap. |
 | `/cuisine/qr` | Feuille imprimable de QR codes, un par table. |
+| `/admin` | **Centre de contrôle** (mot de passe). Carte (rubriques, plats, prix, photos, ruptures, ordre), annonces (plat du jour, annonce, partenaire, pub), infos & réseaux, photos, sécurité. |
+| `/media/[id]` | Sert les photos téléversées depuis le centre de contrôle. |
 | `/sommelier` | Chat en streaming avec Claude, qui ne connaît **que** la carte (prompt système mis en cache). |
 | `/reserver` | Réservation ou commande de gâteau via un message WhatsApp prêt à envoyer. |
+
+## Centre de contrôle (/admin)
+
+**Mot de passe initial : `paris2026`.** Changez-le dès la première connexion (Sécurité).
+
+- **La carte** : ajoutez, modifiez, masquez, réordonnez rubriques et plats ; deux prix possibles (moyenne / grande, verre / bouteille) ; tags 👑 🌿 🌶️ ; bouton « Disponible aujourd'hui » pour signaler une rupture sans supprimer le plat. Chaque changement est en ligne immédiatement.
+- **Annonces & pubs** : quatre types. *Plat du jour* (grande carte commandable, avec prix), *Annonce* (bandeau défilant sous le menu), *Partenaire* (logo dans « Ils nous accompagnent »), *Publicité* (carte sponsorisée sur l'accueil et au fil de la carte). Dates de début et de fin optionnelles.
+- **Infos & réseaux** : devise, WhatsApp, téléphone, adresse, horaires, liste des réseaux sociaux.
+- **Photos** : téléversement (redimensionnées à 1 600 px, recompressées), bibliothèque, suppression. Les photos de la carte imprimée restent disponibles.
+- **Sécurité** : mot de passe du centre de contrôle et PIN de l'écran cuisine.
+
+Le contenu vit dans Supabase (tables `ptp_sections`, `ptp_items`, `ptp_posts`, `ptp_media`, `ptp_site`), amorcé depuis `lib/menu.ts` par `scripts/seed-menu.ts`. Si la base est injoignable, le site retombe sur la carte imprimée du code.
 
 ## Commande à table : comment ça marche
 
@@ -27,10 +41,10 @@ Site Next.js (App Router) pensé pour Vercel, pour P'tit Paris, Gounghin, Ouagad
 
 ### Où sont les données
 
-Dans Supabase, projet `kaj-system` (`uvcibhbslsvakmjcfzwx`), tables préfixées `ptp_` (`ptp_orders`, `ptp_settings`, `ptp_pin_failures`).
+Dans Supabase, projet `kaj-system` (`uvcibhbslsvakmjcfzwx`), tables préfixées `ptp_` (commandes, carte, annonces, médias, réglages).
 Les tables sont verrouillées (RLS sans policy) : tout passe par des fonctions SQL `ptp_*` en `security definer` qui valident chaque appel. La clé « publishable » embarquée dans `lib/db.ts` est publique par conception et ne donne accès à rien d'autre.
 
-Pour déplacer les commandes vers un projet Supabase dédié : rejouez le SQL de `supabase/ptit_paris_orders.sql`, puis renseignez `NEXT_PUBLIC_SUPABASE_URL` et `NEXT_PUBLIC_SUPABASE_KEY` sur Vercel.
+Pour déplacer les données vers un projet Supabase dédié : rejouez `supabase/ptit_paris_orders.sql`, `supabase/ptit_paris_content.sql` puis `supabase/seed_menu.sql`, et renseignez `NEXT_PUBLIC_SUPABASE_URL` et `NEXT_PUBLIC_SUPABASE_KEY` sur Vercel.
 
 ### Développer sans Supabase
 
@@ -38,11 +52,11 @@ Pour déplacer les commandes vers un projet Supabase dédié : rejouez le SQL de
 PTP_MOCK_DB=1 npm run dev
 ```
 
-Les commandes tournent alors en mémoire (perdues au redémarrage), PIN `240926`.
+Tout tourne alors en mémoire (perdu au redémarrage) : PIN cuisine `240926`, mot de passe admin `paris2026`, carte amorcée depuis le code.
 
 ## Données de la carte
 
-Toute la carte vit dans `lib/menu.ts` (transcription de `menu.ptitparis.com`, édition novembre 2025). Les photos des plats sont dans `public/photos/`, celles du lieu dans `public/interior/`. Pour changer un prix ou ajouter un plat, c'est le seul fichier à toucher.
+La carte imprimée est transcrite dans `lib/menu.ts` (secours et amorçage). Au quotidien, on la modifie depuis `/admin`, pas dans le code. Les photos d'origine sont dans `public/photos/`, celles du lieu dans `public/interior/`.
 
 ## Lancer en local
 
