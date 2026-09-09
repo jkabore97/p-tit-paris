@@ -39,7 +39,8 @@ export function Footer({ site: data }: { site: ResolvedSite }) {
               <li><Link className="hover:text-honey" href="/commander">Commander à table</Link></li>
               <li><Link className="hover:text-honey" href="/sommelier">Le sommelier IA</Link></li>
               <li><Link className="hover:text-honey" href="/reserver">Réserver une table</Link></li>
-              <li><Link className="hover:text-honey" href="/cuisine">Espace équipe</Link></li>
+              <li><Link className="hover:text-honey" href="/cuisine">Écran cuisine</Link></li>
+              <li><Link className="hover:text-honey" href="/admin">Centre de contrôle</Link></li>
             </ul>
           </div>
           <div>

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Logo } from "@/components/Logo";
@@ -29,6 +30,10 @@ export function AdminLogin() {
         <input type="password" value={pwd} onChange={(e) => setPwd(e.target.value)} autoFocus placeholder="Mot de passe" className="mt-6 w-full rounded-2xl bg-marble px-4 py-3.5 text-center text-lg text-ink focus:outline-none focus:ring-2 focus:ring-candy" />
         {error && <p className="mt-3 text-sm text-candy">{error}</p>}
         <button disabled={busy || pwd.length < 4} className="btn-shine mt-5 w-full rounded-full bg-wine py-3.5 font-semibold uppercase tracking-[0.2em] text-white transition hover:bg-candy disabled:opacity-40">{busy ? "…" : "Entrer"}</button>
+        <p className="mt-5 flex justify-center gap-4 text-xs text-muted">
+          <Link href="/" className="hover:text-wine">← Le site</Link>
+          <Link href="/cuisine" className="hover:text-wine">Écran cuisine →</Link>
+        </p>
       </form>
     </div>
   );

@@ -109,6 +109,7 @@ export function KitchenBoard() {
         </div>
         <div className="flex flex-wrap gap-2 text-xs font-semibold uppercase tracking-[0.15em]">
           <Link href="/cuisine/qr" className="rounded-full bg-white/10 px-4 py-2 hover:bg-white/20">QR des tables</Link>
+          <Link href="/admin" className="rounded-full bg-honey px-4 py-2 text-ink hover:bg-white">Centre de contrôle</Link>
           <button onClick={changePin} className="rounded-full bg-white/10 px-4 py-2 hover:bg-white/20">Changer le PIN</button>
           <button onClick={logout} className="rounded-full bg-white/10 px-4 py-2 hover:bg-candy">Quitter</button>
         </div>
