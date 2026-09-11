@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { track } from "@/lib/track";
 
 type Turn = { role: "user" | "assistant"; content: string };
 
@@ -41,6 +42,7 @@ export function Sommelier({ initialQuestion }: { initialQuestion?: string }) {
     const history: Turn[] = [...turns, { role: "user", content: q }];
     setTurns([...history, { role: "assistant", content: "" }]);
     setBusy(true);
+    track("sommelier_question", { longueur: q.length, suite: turns.length > 0 });
     try {
       const res = await fetch("/api/sommelier", {
         method: "POST",

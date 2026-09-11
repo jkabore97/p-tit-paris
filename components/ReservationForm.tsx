@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { track } from "@/lib/track";
 
 const slots = ["07:00", "08:00", "09:30", "12:00", "12:30", "13:00", "13:30", "19:00", "19:30", "20:00", "20:30", "21:00", "21:30"];
 
@@ -20,6 +21,7 @@ export function ReservationForm({ whatsapp }: { whatsapp: string }) {
   const [copied, setCopied] = useState(false);
 
   async function copy() {
+    track("reservation", { canal: "copie", couverts: f.guests });
     await navigator.clipboard.writeText(message);
     setCopied(true);
     setTimeout(() => setCopied(false), 1800);
@@ -64,6 +66,7 @@ export function ReservationForm({ whatsapp }: { whatsapp: string }) {
         <div className="mt-8 space-y-3">
           {wa ? (
             <a
+              onClick={() => ready && track("reservation", { canal: "whatsapp", couverts: f.guests })}
               href={ready ? wa : undefined}
               aria-disabled={!ready}
               target="_blank"

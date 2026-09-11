@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import { cart, useCart } from "@/lib/cart";
+import { track } from "@/lib/track";
 import { formatPrice, orderableSections, slugify, TAG_LABEL, type Book, type FlatItem } from "@/lib/menu";
 import type { Post } from "@/lib/types";
 import { PlatDuJourCard } from "./PostCards";
@@ -72,6 +73,13 @@ export function OrderBuilder({ books, platDuJour, tableFromUrl }: { books: Book[
       });
       const data = (await res.json()) as { id?: string; error?: string };
       if (!res.ok || !data.id) throw new Error(data.error ?? "Envoi impossible");
+      track("commande_envoyee", {
+        table,
+        total,
+        articles: count,
+        plat_du_jour: lines.some((l) => l.key.startsWith("post:")),
+        origine: tableFromUrl ? "qr" : "manuel",
+      });
       cart.clear();
       router.push(`/commande/${data.id}`);
     } catch (e) {
