@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Logo, Wordmark } from "./Logo";
+import { PoweredByKaj } from "./PoweredByKaj";
 import { site } from "@/lib/site";
 import type { ResolvedSite } from "@/lib/content";
 
@@ -61,8 +62,13 @@ export function Footer({ site: data }: { site: ResolvedSite }) {
             </ul>
           </div>
         </div>
-        <div className="border-t border-white/10 py-5 text-center text-xs text-white/50">
-          © {new Date().getFullYear()} {site.name} · Prix en francs CFA · Carte susceptible de changer
+        <div className="border-t border-white/10 py-6">
+          <div className="mx-auto flex max-w-6xl flex-col items-center gap-4 px-5 text-center sm:flex-row sm:justify-between sm:text-left">
+            <p className="text-xs text-white/50">
+              © {new Date().getFullYear()} {site.name} · Prix en francs CFA · Carte susceptible de changer
+            </p>
+            <PoweredByKaj />
+          </div>
         </div>
       </div>
     </footer>
